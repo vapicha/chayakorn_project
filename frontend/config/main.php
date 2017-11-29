@@ -36,14 +36,20 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
+        'view'=>[
+            'theme'=>[
+                'pathMap'=>[ '@app/views' => '@agency/views' ] ,
+                'baseUrl' => '@frontend/themes/agency'
+            ]
+        ],
+        
         'urlManager' => [
             'enablePrettyUrl' => true,
-            'showScriptName' => false,
+            'showScriptName' => true,
             'rules' => [
             ],
         ],
-        */
+        
     ],
     'params' => $params,
 ];
