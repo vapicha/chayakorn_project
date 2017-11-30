@@ -14,5 +14,11 @@ return [
             'class' => 'yii\image\ImageDriver',
             'driver' => 'GD',  //GD or Imagick
         ],
+        'qr' => [
+            'class' => '\Da\QrCode\Component\QrCodeComponent',
+            // 'label' => 'llk med center',
+            'size' => 50 // big and nice :D
+            // ... you can configure more properties of the component here
+        ]
     ],
 ];

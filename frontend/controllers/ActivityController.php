@@ -4,6 +4,8 @@ namespace frontend\controllers;
 
 use Yii;
 use common\models\Activity;
+use common\models\Person;
+use common\models\ActivityMember;
 use common\models\ActivitySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -65,8 +67,12 @@ class ActivityController extends Controller
     {
         $model = new Activity();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->date_start = Yii::$app->request->post('date_start');
+            $model->date_end = Yii::$app->request->post('date_end');
+            if($model->save()){
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -84,9 +90,13 @@ class ActivityController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
+        if ($model->load(Yii::$app->request->post())) {
+            $model->date_start = Yii::$app->request->post('date_start');
+            $model->date_end = Yii::$app->request->post('date_end');
+            if($model->save()){
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        }  else {
             return $this->render('update', [
                 'model' => $model,
             ]);
@@ -101,9 +111,50 @@ class ActivityController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        ActivityMember::deleteAll(['activity_list_id'=>$model->id]);
+        $model->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionScan($activity_id){
+        $model = new Person();
+        if($model->load(Yii::$app->request->post()))
+        {
+            $person = Person::find()->where(['code'=>$model->code])->one();
+            if(isset($person)){
+                $ac_member = ActivityMember::find()->where(['activity_list_id'=>$activity_id])->andWhere(['person_id'=>$person->id])->one();
+                if(!isset($ac_member)){
+                    $ac_member = new ActivityMember();
+                    $ac_member->activity_list_id = $activity_id;
+                    $ac_member->person_id = $person->id;
+                    if($ac_member->save()){
+                        return $this->render('scan_qrcode',['model'=>$model,'person'=>$person]);
+                    }else{
+                        Yii::$app->getSession()->setFlash('alert',[
+                        'body'=>'ระบบขัดข้อง กรุณาติดต่อเจ้าหน้าที่',
+                        'options'=>['class'=>'alert-danger']
+                        ]);
+                        return $this->render('scan_qrcode',['model'=>$model]);
+                    }
+                }else{
+                    return $this->render('scan_qrcode',['model'=>$model,'person'=>$person]);
+                }
+            }else{
+                Yii::$app->getSession()->setFlash('alert',[
+                    'body'=>'ไม่พบข้อมูล QR Code รหัส '.$model->code.' ดังกล่าว กรุณาติดต่อเจ้าหน้าที่',
+                    'options'=>['class'=>'alert-danger']
+                    ]);
+                return $this->render('scan_qrcode',['model'=>$model]);
+            }
+        }
+        return $this->render('scan_qrcode',['model'=>$model]);
+    }
+    public function actionDeleteMember($id,$activity_id){
+        $model = ActivityMember::find()->where(['id'=>$id])->one();
+        $model->delete();
+        return $this->redirect(['view','id'=>$activity_id]);
     }
 
     /**

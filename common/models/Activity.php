@@ -42,10 +42,10 @@ class Activity extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'date_start' => 'Date Start',
-            'date_end' => 'Date End',
-            'detail' => 'Detail',
+            'name' => 'ชื่อกิจกรรม',
+            'date_start' => 'วันเริ่มต้น',
+            'date_end' => 'วันสิ้นสุด',
+            'detail' => 'รายละเอียด',
         ];
     }
 }

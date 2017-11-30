@@ -2,22 +2,60 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
+use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $model common\models\Activity */
 /* @var $form yii\widgets\ActiveForm */
+if(!isset($model->date_end)){
+	$date_start = date('Y-m-d');
+	$date_end = date('Y-m-d');
+}else{
+	$date_start = $model->date_start;
+	$date_end = $model->date_end;
+}
 ?>
 
-<div class="activity-form">
+<div class="enhanced">
 
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'date_start')->textInput() ?>
-
-    <?= $form->field($model, 'date_end')->textInput() ?>
-
+	<div class = "col-md-6">
+		วันเริ่มต้นกิจกรรม
+		<div class="input-group drp-container">
+			<?= DateRangePicker::widget([
+			    'name'=>'date_start',
+			    'value'=>$date_start,
+			    'useWithAddon'=>true,
+			    'pluginOptions'=>[
+			        'singleDatePicker'=>true,
+			        'showDropdowns'=>true
+			    ]
+			]) ?>
+			<span class="input-group-addon">
+				<i class="glyphicon glyphicon-calendar"></i>
+			</span>
+		</div>
+	</div>
+	<div class = "col-md-6">
+		วันสิ้นสุดกิจกรรม
+		<div class="input-group drp-container">
+			<?= DateRangePicker::widget([
+			    'name'=>'date_end',
+			    'value'=>$date_end,
+			    'useWithAddon'=>true,
+			    'pluginOptions'=>[
+			        'singleDatePicker'=>true,
+			        'showDropdowns'=>true,
+			    ],
+			])?>
+			<span class="input-group-addon">
+				<i class="glyphicon glyphicon-calendar"></i>
+			</span>
+		</div>
+	</div>
+	<br />
     <?= $form->field($model, 'detail')->textarea(['rows' => 6]) ?>
 
     <div class="form-group">

@@ -5,6 +5,9 @@ namespace frontend\controllers;
 use Yii;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\web\Response;
+use kartik\mpdf\Pdf;
+
 use common\models\Person;
 use common\models\PersonSearch;
 use common\models\Photo;
@@ -179,6 +182,60 @@ class PersonController extends Controller
             return $file;
     }
 
+    public function actionPdf($id){
+        $model = Person::find()->where(['id'=>$id])->one();
+        
+        $content = $this->renderPartial('_form_card', [
+            'model' => $model
+        ]);
+
+        // setup kartik\mpdf\Pdf component
+        $pdf = new Pdf([
+            // set to use core fonts only
+            'mode' => Pdf::MODE_UTF8,
+            // A4 paper format
+            'format' => [100, 60],//กำหนดขนาด
+            'marginLeft' => false,
+            'marginRight' => false,
+            'marginTop' => 1,
+            'marginBottom' => false,
+            'marginHeader' => false,
+            'marginFooter' => false,
+
+            // portrait orientation
+            'orientation' => Pdf::ORIENT_PORTRAIT,
+            // stream to browser inline
+            'destination' => Pdf::DEST_BROWSER,
+            // your html content input
+            'content' => $content,
+            // format content from your own css file if needed or use the
+            // enhanced bootstrap css built by Krajee for mPDF formatting
+            'cssFile' => '@frontend/web/css/pdf.css',
+            // any css to be embedded if required
+            'cssInline' => '.bd{border:1.5px solid; text-align: center;} .ar{text-align:right} .imgbd{border:1px solid}',
+            // set mPDF properties on the fly
+            'options' => ['title' => 'Print Card', ],
+            // call mPDF methods on the fly
+            'methods' => [
+                // 'SetHeader'=>false,
+                // 'SetFooter'=>false,
+            ]
+        ]);
+
+        // return the pdf output as per the destination setting
+        return $pdf->render('_form_card');
+    }
+
+    public function actionQrcode($text = null){
+         $qr = Yii::$app->get('qr');
+
+        Yii::$app->response->format = Response::FORMAT_RAW;
+        Yii::$app->response->headers->add('Content-Type', $qr->getContentType());
+
+        return $qr
+            ->setText($text)
+            ->writeString();
+    }
     /**
      * Finds the Person model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

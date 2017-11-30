@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Person */
@@ -16,6 +17,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a('ไปหน้ารายการบุคคล', ['index'], ['class' => 'btn btn-info']) ?>
+        <?= Html::a('<span class="glyphicon glyphicon-print"></span> พิมพ์บัตรสมาชิก', ['pdf', 'id' => $model->id], ['class' => 'btn btn-warning']) ?>
+
         <?= Html::a('แก้ไข', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('ลบ', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
@@ -40,7 +43,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'code',
             'phone_number',
             'fullBirthday',
+            [
+                'attribute' => 'qrcode',
+                'format' => 'raw',
+            ]
         ],
     ]) ?>
-
 </div>

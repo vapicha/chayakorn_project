@@ -42,7 +42,9 @@ for ($i=$end; $i >= $start; $i--) {
                 'options' => ['enctype' => 'multipart/form-data'],
         ]); ?>
         <div class = "col-md-6">
-            <?= $form->field($model, 'firstname')->textInput(['maxlength' => true]) ?>        
+            <?= $form->field($model, 'firstname',
+                        ['inputOptions' => ['autofocus' => 'autofocus', 'class' => 'form-control', 'tabindex' => '1']
+                        ])->textInput(['maxlength' => true]) ?>        
         </div>
         <div class = "col-md-6">
             <?= $form->field($model, 'lastname')->textInput(['maxlength' => true]) ?>        

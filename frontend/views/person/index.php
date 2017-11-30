@@ -43,8 +43,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     'code',
                     'phone_number',
                     'birth_date',
-
-                    ['class' => 'yii\grid\ActionColumn'],
+                    
+                    [
+                        'class' => 'yii\grid\ActionColumn',
+                        'buttonOptions'=>['class'=>'btn btn-default'],
+                        'template'=>'<div class="btn-group btn-group-sm text-center" role="group"> {view} {update} {delete} </div>',
+                    ],
                 ],
             ]); ?>
         </div>

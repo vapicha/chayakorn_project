@@ -30,7 +30,6 @@ class ActivityMember extends \yii\db\ActiveRecord
         return [
             [['activity_list_id', 'person_id'], 'required'],
             [['activity_list_id', 'person_id'], 'integer'],
-            [['detail'], 'string'],
         ];
     }
 
@@ -43,7 +42,11 @@ class ActivityMember extends \yii\db\ActiveRecord
             'id' => 'ID',
             'activity_list_id' => 'Activity List ID',
             'person_id' => 'Person ID',
-            'detail' => 'Detail',
         ];
+    }
+
+    public function getPerson()
+    {
+        return $this->hasOne(Person::className(), ['id' => 'person_id']);
     }
 }

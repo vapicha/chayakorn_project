@@ -4,6 +4,8 @@ namespace common\models;
 
 use Yii;
 use dosamigos\gallery\Gallery;
+use yii\helpers\Url;
+
 /**
  * This is the model class for table "person".
  *
@@ -78,5 +80,17 @@ class Person extends \yii\db\ActiveRecord
         }else{
             return null;
         }
+    }
+    public function getUrlPhoto(){
+        $model = Photo::find()->where(['person_id'=>$this->id])->one();
+        if(isset($model)){
+            $preview = $model->getThumbnails($model->ref,$model->name);
+            return $preview[0]['url'];
+        }else{
+            return null;
+        }   
+    }
+    public function getQrcode(){
+        return '<img src='.Url::to(['person/qrcode', 'text' => $this->code]).' />';
     }
 }
