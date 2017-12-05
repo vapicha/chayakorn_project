@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('ไปหน้ารายการบุคคล', ['index'], ['class' => 'btn btn-info']) ?>
         <?= Html::a('<span class="glyphicon glyphicon-print"></span> พิมพ์บัตรสมาชิก', ['pdf', 'id' => $model->id], ['class' => 'btn btn-warning']) ?>
-
+        <?= Html::a('<span class="glyphicon glyphicon-plus"></span> เพิ่มบุคคลใหม่', ['create'], ['class' => 'btn btn-success']) ?>
         <?= Html::a('แก้ไข', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('ลบ', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',

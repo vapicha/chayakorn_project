@@ -41,8 +41,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
 </div>
 
-$activity_id = $model->id;
-
 <?php 
     $activity_list = ActivityMember::find()->where(['activity_list_id'=>$model->id]);
     $dataProvider = new ActiveDataProvider([
@@ -52,6 +50,7 @@ $activity_id = $model->id;
         ],
     ]);
 ?>
+<?= Html::a('เพิ่มผู้เข้าร่วม', ['add-member','activity_list_id'=>$model->id], ['class' => 'btn btn-success']) ?>
 <div class = "row" style="margin: auto">
     <div class="panel panel-primary">
         <div class="panel-heading">
@@ -80,8 +79,13 @@ $activity_id = $model->id;
                     'template' =>'{view} {delete} ',
                     'buttons'=>[
                         'view' => function($url,$model,$key){
+                            if(isset($model->person->id)){
+                                $id = $model->person->id;
+                            }else{
+                                $id = '';
+                            }
                             return Html::a('<i class="glyphicon glyphicon-eye-open"></i>',
-                                            ['person/view','id'=>$model->person->id]
+                                            ['person/view','id'=>$id]
                                 );
                         },
                         'delete' => function($url,$model,$key){

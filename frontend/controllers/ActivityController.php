@@ -151,6 +151,42 @@ class ActivityController extends Controller
         }
         return $this->render('scan_qrcode',['model'=>$model]);
     }
+
+    public function actionAddMember($activity_list_id){
+        $model = new ActivityMember();
+        if ($model->load(Yii::$app->request->post())) {
+            $member = ActivityMember::find()->where(['activity_list_id'=>$activity_list_id])->andWhere(['person_id'=>$model->person_id])->one();
+            $model_activity = Activity::find()->where(['id' => $activity_list_id])->one();
+            $model->activity_list_id = $activity_list_id;
+            if(isset($member)){
+                Yii::$app->getSession()->setFlash('alert',[
+                    'body'=>'บุคคลนี้ กัลฯ'.$member->person->fullname.' ได้ลงทะเบียนเรียบร้อยแล้ว',
+                    'options'=>['class'=>'alert-warning']
+                    ]);
+                return $this->redirect(['add-member', 'activity_list_id'=>$activity_list_id]);
+            }
+            if($model->save()){
+                Yii::$app->getSession()->setFlash('alert',[
+                    'body'=>'ทำการเพิ่มรายชื่อบุคคล กัลฯ'.$model->person->fullname.'  ลงกิจกรรมเรียบร้อยแล้ว',
+                    'options'=>['class'=>'alert-success']
+                    ]);
+                // return $this->redirect(['view', 'id' => $model->id,'activity_id'=>$model_activity->activity_id]);
+                return $this->redirect(['add-member', 'activity_list_id'=>$activity_list_id]);
+            }else{
+                Yii::$app->getSession()->setFlash('alert',[
+                    'body'=>'การเพิ่มรายชื่อบุคคล ไม่สำเร็จ กรุณาเลือกรายชื่อบุคคล!!!',
+                    'options'=>['class'=>'alert-danger']
+                    ]);
+                return $this->redirect(['add-member', 'activity_list_id'=>$activity_list_id]);
+            }
+            
+        } else {
+            return $this->render('_form_add_member', [
+                'model' => $model,
+                'activity_list_id' => $activity_list_id,
+            ]);
+        }
+    }
     public function actionDeleteMember($id,$activity_id){
         $model = ActivityMember::find()->where(['id'=>$id])->one();
         $model->delete();

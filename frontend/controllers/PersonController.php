@@ -6,6 +6,7 @@ use Yii;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\Response;
+use yii\widgets\ActiveForm;
 use kartik\mpdf\Pdf;
 
 use common\models\Person;
@@ -74,6 +75,14 @@ class PersonController extends Controller
     {
         $model = new Person();
         $post = Yii::$app->request->post();
+        //ไว้checkความถูกต้องของข้อมูลก่อนกด submit
+        $request = Yii::$app->getRequest();
+        if ($request->isPost && $request->post('ajax') !== null) {
+            $model->load(Yii::$app->request->post());
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            $result = ActiveForm::validate($model);
+            return $result;
+        }
         if ($model->load($post)) {
             $model->birth_date = Peh::tranBirthDate($post['Person']);
             if($model->save()){

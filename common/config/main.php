@@ -6,6 +6,7 @@ return [
         '@agency' => '@app/themes/agency',
     ],
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
+    'language' => 'th',
     'components' => [
         'cache' => [
             'class' => 'yii\caching\FileCache',

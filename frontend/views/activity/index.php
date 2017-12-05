@@ -29,7 +29,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'date_start',
             'date_end',
             'detail:ntext',
-
             [
               'class' => 'yii\grid\ActionColumn',
               'buttonOptions'=>['class'=>'btn btn-default'],

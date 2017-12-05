@@ -5,6 +5,7 @@ namespace common\models;
 use Yii;
 use dosamigos\gallery\Gallery;
 use yii\helpers\Url;
+use common\models\ActivityMember;
 
 /**
  * This is the model class for table "person".
@@ -41,6 +42,7 @@ class Person extends \yii\db\ActiveRecord
             [['firstname', 'lastname', 'code', 'phone_number'], 'string', 'max' => 255],
             [['phone_number'], 'string', 'max' => 15, 'min' => 8],
             [['phone_number'], 'match', 'not' => true, 'pattern' => '/[^0-9#-]/', 'message' => 'เบอร์โทรต้องประกอบด้วยตัวอักษร 0-9 เท่านั้น'],
+            [['firstname','lastname'],'validateName'],
         ];
     }
 
@@ -92,5 +94,37 @@ class Person extends \yii\db\ActiveRecord
     }
     public function getQrcode(){
         return '<img src='.Url::to(['person/qrcode', 'text' => $this->code]).' />';
+    }
+    public function getCountActivity(){
+        $model_count = ActivityMember::find()->where(['person_id'=>$this->id])->count();
+        return $model_count;
+    }
+    public function validateName(){
+        $model = Person::find()->where(['firstname'=>$this->firstname])->andWhere(['lastname'=>$this->lastname])->one();
+        yii::info('fgsdfgsdf');
+        if(isset($model)){
+            // $this->addError('lastname','มีรายชื่อนี้อยู่ในระบบแล้ว <a href="view?id='.$model->id.'" target="_blank">ตรวจสอบ</a>');
+            $page= '
+                        <a href="" data-toggle="modal" data-target="#modal-checkname">
+                          ตรวจสอบข้อมูล
+                        </a>
+                        <div class="modal fade" id="modal-checkname" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">'.$model->fullname.'</h4>
+                              </div>
+                              <div class="modal-body" style = "color:black">
+                                '.$model->photo.'
+                                <p>วันเกิด : '.$model->fullBirthDay.'</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    ';
+            $this->addError('lastname','มีรายชื่อนี้อยู่ในระบบแล้ว '.$page);
+
+        }
     }
 }

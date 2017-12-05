@@ -40,14 +40,17 @@ for ($i=$end; $i >= $start; $i--) {
 
         <?php $form = ActiveForm::begin([
                 'options' => ['enctype' => 'multipart/form-data'],
+                'enableAjaxValidation'      => true, //เปิดการ validate ด้วย AJAX
+                'enableClientValidation'    => false, // validate ฝั่ง client เมื่อ submit หรือ เปลี่ยนค่า
+                'validateOnChange'          => true,// validate เมื่อมีการเปลี่ยนค่า
+                'validateOnSubmit'          => true,// validate เมื่อ submit ข้อมูล
+                'validateOnBlur'            => false,// validate เมื่อเปลี่ยนตำแหน่ง cursor 
         ]); ?>
         <div class = "col-md-6">
-            <?= $form->field($model, 'firstname',
-                        ['inputOptions' => ['autofocus' => 'autofocus', 'class' => 'form-control', 'tabindex' => '1']
-                        ])->textInput(['maxlength' => true]) ?>        
+            <?= $form->field($model, 'firstname')->textInput(['maxlength' => true]) ?>        
         </div>
         <div class = "col-md-6">
-            <?= $form->field($model, 'lastname')->textInput(['maxlength' => true]) ?>        
+            <?= $form->field($model, 'lastname', ['errorOptions' => ['class' => 'help-block' ,'encode' => false]])->textInput(['maxlength' => true]) ?>        
         </div>
         <div class = "col-md-6">
             <?= $form->field($model, 'phone_number')->textInput(['maxlength' => true]) ?>
