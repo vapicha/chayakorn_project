@@ -55,7 +55,9 @@ class PersonHelper
         }
         $code = $start.$zero.$model->id;
         $model->code = $code;
-        $model->save();
+        if($model->save(false)){
+            yii::info('jfkldsahfjd');            
+        }
         // $model->code = ($model->id)+1000000;
         // $model->save();
     }
@@ -66,14 +68,12 @@ class PersonHelper
         $ref = $Photo['ref'];
         $have_photo = Photo::find()->where(['ref'=>$ref])->one();
         if($images){
-            yii::info("1111");
             if(isset($have_photo)){
                 BaseFileHelper::removeDirectory(Photo::getUploadPath().$have_photo->ref);
                 Photo::deleteAll(['ref'=>$have_photo->ref]);
             }
             PersonHelper::CreateDir($ref);
             foreach ($images as $file){
-                yii::info("222");
                 $fileName       = $file->baseName . '.' . $file->extension;
                 $realFileName   = md5($file->baseName.time()) . '.' . $file->extension;
                 $savePath       = Photo::UPLOAD_FOLDER.'/'.$ref.'/'. $realFileName;

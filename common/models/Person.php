@@ -101,7 +101,6 @@ class Person extends \yii\db\ActiveRecord
     }
     public function validateName(){
         $model = Person::find()->where(['firstname'=>$this->firstname])->andWhere(['lastname'=>$this->lastname])->one();
-        yii::info('fgsdfgsdf');
         if(isset($model)){
             // $this->addError('lastname','มีรายชื่อนี้อยู่ในระบบแล้ว <a href="view?id='.$model->id.'" target="_blank">ตรวจสอบ</a>');
             $page= '

@@ -4,9 +4,12 @@ use yii\helpers\Html;
 // use yii\grid\GridView;
 use kartik\grid\GridView;
 use kartik\export\ExportMenu;
+use common\models\Person; 
+use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\PersonSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+
 
 $this->title = 'รายการบุคคล';
 $this->params['breadcrumbs'][] = $this->title;
@@ -34,16 +37,16 @@ $items =[
         'template'=>'<div class="btn-group btn-group-sm text-center" role="group"> {view} {update} {delete} </div>',
     ]
 ];
+
 ?>
 <div class="person-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?= Html::a('เพิ่มบุคคลใหม่', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <font color="white"><h1><?= Html::encode($this->title) ?></h1></font>
     
+    <p>
+        <?= Html::a('<span class="glyphicon glyphicon-plus"></span> เพิ่มบุคคลใหม่', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('<span class="glyphicon glyphicon-print"></span> พิมพ์บัตรสมาชิก',['pdf-all'], ['class' => 'btn btn-info']) ?>
+    </p>
 </div>
 
 <div class = "row" style="margin: auto">
@@ -59,6 +62,7 @@ $items =[
         ?>
         <div class="panel-body" >
             <?= GridView::widget([
+                'id' => 'person_grid',
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
                 'columns' => $items
@@ -66,3 +70,4 @@ $items =[
         </div>
     </div>
 </div>
+

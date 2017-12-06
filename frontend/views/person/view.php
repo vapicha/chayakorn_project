@@ -42,10 +42,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'lastname',
             'code',
             'phone_number',
-            'fullBirthday',
+            [
+                'attribute'=>'fullBirthday',
+                'label' =>'วันเกิด/อายุ'
+            ],
             [
                 'attribute' => 'qrcode',
                 'format' => 'raw',
+                'label' => 'คิวอาร์โค้ด'
             ]
         ],
     ]) ?>

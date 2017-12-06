@@ -40,7 +40,8 @@
         "dmstr/yii2-adminlte-asset": ">2",
         "2amigos/qrcode-library": "~1.1",
         "kartik-v/yii2-mpdf": "dev-master",
-        "mpdf/mpdf": "^7.0"
+        "mpdf/mpdf": "^7.0",
+        "kartik-v/yii2-grid": "@dev"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
