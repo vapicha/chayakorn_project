@@ -114,6 +114,7 @@ class PersonController extends Controller
         $model = PeH::tranBirthDateToForm($model);
         $photo = Photo::find()->where(['person_id'=>$id])->one();
         $post = Yii::$app->request->post();
+
         if(isset($photo)){
             list($initialPreview,$initialPreviewConfig) = $this->getInitialPreview($photo->ref);
             $model->ref = $photo->ref;
@@ -124,7 +125,7 @@ class PersonController extends Controller
         }
         if ($model->load($post)) {
             $model->birth_date = Peh::tranBirthDate($post['Person']);
-            if($model->save()){
+            if($model->save(false)){
                 // Peh::saveGenerateCode($model);
                 Peh::uploadPhoto($model->id);
                 return $this->redirect(['view', 'id' => $model->id]);

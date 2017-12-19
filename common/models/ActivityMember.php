@@ -49,4 +49,7 @@ class ActivityMember extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Person::className(), ['id' => 'person_id']);
     }
+    public function getActivity(){
+        return $this->hasOne(Activity::className(), ['id' => 'activity_list_id']);
+    }
 }
